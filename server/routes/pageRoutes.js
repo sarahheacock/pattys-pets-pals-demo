@@ -58,27 +58,27 @@ const formatOutput = (obj) => {
 
 
 //===================GET SECTIONS================================
-// pageRoutes.post('/', (req, res, next) => {
-//   let page = new Page(req.body);
-//
-//   bcrypt.hash(page.password, 10, (err, hash) => {
-//     if (err) {
-//       return next(err);
-//     }
-//     page.password = hash;
-//
-//     page.save((err, page) => {
-//       if(err){
-//         err = new Error("Page not created");
-//         err.status = 404;
-//         return next(err);
-//       }
-//       res.status(201);
-//       res.json(page)
-//     });
-//
-//   });
-// })
+pageRoutes.post('/', (req, res, next) => {
+  let page = new Page(req.body);
+
+  bcrypt.hash(page.password, 10, (err, hash) => {
+    if (err) {
+      return next(err);
+    }
+    page.password = hash;
+
+    page.save((err, page) => {
+      if(err){
+        err = new Error("Page not created");
+        err.status = 404;
+        return next(err);
+      }
+      res.status(201);
+      res.json(page)
+    });
+
+  });
+})
 
 
 //get page
@@ -93,7 +93,7 @@ pageRoutes.get('/:pageID', (req, res, next) => {
 
 
 //add rate
-pageRoutes.post('/:pageID/:section', mid.authorizeUser, mid.checkRateInput, (req, res, next) => {
+pageRoutes.post('/:pageID/:section', mid.checkRateInput, (req, res, next) => {
   req.section.rate.push(req.body);
   req.page.save((err, page) => {
     if(err){
@@ -108,7 +108,7 @@ pageRoutes.post('/:pageID/:section', mid.authorizeUser, mid.checkRateInput, (req
 
 
 //update page content
-pageRoutes.put('/:pageID/:section/', mid.authorizeUser, mid.checkEditInput, (req, res, next) => {
+pageRoutes.put('/:pageID/:section/', mid.checkEditInput, (req, res, next) => {
   // Object.assign(req.section, req.body);
   req.page[req.params.section] = Object.assign({}, req.section, req.body);
 
@@ -124,7 +124,7 @@ pageRoutes.put('/:pageID/:section/', mid.authorizeUser, mid.checkEditInput, (req
 })
 
 //update rate
-pageRoutes.put('/:pageID/:section/:sectionID', mid.authorizeUser, mid.checkRateInput, (req, res, next) => {
+pageRoutes.put('/:pageID/:section/:sectionID', mid.checkRateInput, (req, res, next) => {
   Object.assign(req.sectionID, req.body);
 
   req.page.save((err,page) => {
@@ -139,7 +139,7 @@ pageRoutes.put('/:pageID/:section/:sectionID', mid.authorizeUser, mid.checkRateI
 })
 
 //delete rate
-pageRoutes.delete("/:pageID/:section/:sectionID", mid.authorizeUser, (req, res) => {
+pageRoutes.delete("/:pageID/:section/:sectionID", (req, res) => {
   req.sectionID.remove((err) => {
     req.page.save((err, page) => {
       if(err){

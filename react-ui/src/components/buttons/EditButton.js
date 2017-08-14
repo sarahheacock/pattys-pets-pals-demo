@@ -28,7 +28,7 @@ const EditButton = (props) => {
 
   //====admin page editting==============
   //props.dataObj will be the selected data point
-  if(!(!props.user.token) && adminAuth){
+  if(adminAuth){
 
     let result = {};
     if(props.title === "Edit" || props.title === "Add"){
@@ -44,10 +44,10 @@ const EditButton = (props) => {
 
     dataObj = Object.assign({}, result);
 
-    if(props.title === "Delete") url = `/page/${blogID}/${props.route}/${props.dataObj._id}?token=${props.user.token}`;
-    else if(props.title === "Add") url = `/page/${blogID}/${props.route}?token=${props.user.token}`;
-    else if(props.title === "Edit" && props.dataObj.p1 !== undefined) url = `/page/${blogID}/${props.route}?token=${props.user.token}`;
-    else if(props.title === "Edit" && props.dataObj.p1 === undefined) url = `/page/${blogID}/${props.route}/${props.dataObj._id}?token=${props.user.token}`;
+    if(props.title === "Delete") url = `/page/${blogID}/${props.route}/${props.dataObj._id}`;
+    else if(props.title === "Add") url = `/page/${blogID}/${props.route}`;
+    else if(props.title === "Edit" && props.dataObj.p1 !== undefined) url = `/page/${blogID}/${props.route}`;
+    else if(props.title === "Edit" && props.dataObj.p1 === undefined) url = `/page/${blogID}/${props.route}/${props.dataObj._id}`;
   }
   else if(props.title.includes("Login")) {
     Object.keys(loginData).forEach((k) => dataObj[k] = '');
@@ -75,9 +75,7 @@ const EditButton = (props) => {
   //page editing buttons are hidden
   //if we are not updating edit, then navLink to next page
   //...otherwise wait
-  const button = (!props.user.token && adminAuth) ?
-    <div></div> :
-    ((modalTitle === "Send Message") ?
+  const button = ((modalTitle === "Send Message") ?
       <a href="#" onClick={(e) => { if(e) e.preventDefault(); props.updateState(content); }}>
         <i className="fa fa-envelope env" aria-hidden="true"></i>
       </a> :

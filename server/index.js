@@ -16,7 +16,7 @@ const options = {
 
 const refreshRoutes = express.Router();
 const pageRoutes = require("./routes/pageRoutes");
-const loginRoutes = require("./routes/loginRoutes");
+// const loginRoutes = require("./routes/loginRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 
 
@@ -51,7 +51,7 @@ refreshRoutes.get('*', function(request, response) {
 
 // apply the routes to our application with the prefix /api
 app.use('/sayHello', messageRoutes);
-app.use('/login', loginRoutes);
+// app.use('/login', loginRoutes);
 app.use('/page', pageRoutes);
 app.use(refreshRoutes);
 
